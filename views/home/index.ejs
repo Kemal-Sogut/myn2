@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html class="h-full">
+
+<head>
+    <%- include('../partials/head') %>
+</head>
+
+<body class="h-full bg-gradient-to-br from-amber-50 via-orange-50 to-rose-50 font-['Inter'] flex flex-col">
+    <%- include('../partials/navbar') %>
+        <%- include('../partials/flash') %>
+
+            <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full flex-grow">
+                <!-- Hero Section -->
+                <div class="text-center py-16 px-4">
+                    <div class="inline-flex items-center mb-8">
+                        <img class="w-64 h-64 object-cover" src="./hero.jpg">
+                    </div>
+                    <div class="max-w-3xl mx-auto">
+
+                        <div
+                            class="inline-flex items-center px-4 py-2 bg-amber-100 text-amber-800 rounded-full text-sm font-medium mb-6">
+                            🌙 Ramadhan Mubarak
+                        </div>
+                        <h1 class="text-5xl md:text-6xl font-bold text-gray-800 mb-6 leading-tight">
+                            Share the <span
+                                class="bg-gradient-to-r from-amber-500 to-orange-500 bg-clip-text text-transparent">Blessing</span>
+                            of Iftar
+                        </h1>
+                        <p class="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+                            Connect with your neighbours, host Iftar gatherings, and build lasting community bonds
+                            during this blessed month.
+                        </p>
+                        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                            <a href="/events"
+                                class="inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-xl font-semibold text-lg hover:from-amber-600 hover:to-orange-600 transition-all shadow-lg hover:shadow-xl">
+                                <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                </svg>
+                                Browse Events
+                            </a>
+                            <% if (!user) { %>
+                                <a href="/signup"
+                                    class="inline-flex items-center justify-center px-8 py-4 bg-white text-amber-600 border-2 border-amber-500 rounded-xl font-semibold text-lg hover:bg-amber-50 transition-all">
+                                    Join Community
+                                </a>
+                                <% } %>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Features Section -->
+                <div class="py-16">
+                    <div class="grid md:grid-cols-3 gap-8">
+                        <div
+                            class="bg-white/60 backdrop-blur-sm rounded-2xl p-8 border border-amber-100 text-center hover:shadow-lg transition-shadow">
+                            <div
+                                class="w-14 h-14 bg-gradient-to-br from-amber-400 to-orange-500 rounded-xl flex items-center justify-center mx-auto mb-4 shadow-md">
+                                <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-800 mb-2">Connect</h3>
+                            <p class="text-gray-600">Meet neighbours you never knew and build lasting friendships over
+                                shared meals.</p>
+                        </div>
+
+                        <div
+                            class="bg-white/60 backdrop-blur-sm rounded-2xl p-8 border border-amber-100 text-center hover:shadow-lg transition-shadow">
+                            <div
+                                class="w-14 h-14 bg-gradient-to-br from-amber-400 to-orange-500 rounded-xl flex items-center justify-center mx-auto mb-4 shadow-md">
+                                <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" />
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-800 mb-2">Host</h3>
+                            <p class="text-gray-600">Share the blessing by hosting Iftar and welcoming neighbours to
+                                your table.</p>
+                        </div>
+
+                        <div
+                            class="bg-white/60 backdrop-blur-sm rounded-2xl p-8 border border-amber-100 text-center hover:shadow-lg transition-shadow">
+                            <div
+                                class="w-14 h-14 bg-gradient-to-br from-amber-400 to-orange-500 rounded-xl flex items-center justify-center mx-auto mb-4 shadow-md">
+                                <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-800 mb-2">Share</h3>
+                            <p class="text-gray-600">Experience the joy of giving and create beautiful memories this
+                                Ramadhan.</p>
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+            <%- include('../partials/footer') %>
+</body>
+
+</html>

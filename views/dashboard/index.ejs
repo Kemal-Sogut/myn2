@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html class="h-full">
+
+<head>
+    <%- include('../partials/head', { title: title + ' - Meet Your Neighbour' }) %>
+</head>
+
+<body class="h-full bg-gradient-to-br from-amber-50 via-orange-50 to-rose-50 font-['Inter'] flex flex-col">
+    <%- include('../partials/navbar') %>
+        <%- include('../partials/flash') %>
+
+            <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full flex-grow">
+                <div class="space-y-8">
+                    <!-- Header -->
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h1 class="text-3xl font-bold text-gray-800">
+                                <%= title %>
+                            </h1>
+                            <p class="text-gray-600 mt-1">
+                                <% if (user.role===2) { %>
+                                    Manage all events and RSVPs
+                                    <% } else if (user.role===1) { %>
+                                        Manage your hosted events
+                                        <% } else { %>
+                                            Track your Iftar RSVPs
+                                            <% } %>
+                            </p>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span
+                                class="px-3 py-1 rounded-full text-sm font-medium <%= user.role === 2 ? 'bg-purple-100 text-purple-700' : user.role === 1 ? 'bg-amber-100 text-amber-700' : 'bg-gray-100 text-gray-600' %>">
+                                <%= user.role===2 ? 'Admin' : user.role===1 ? 'Host' : 'Guest' %>
+                            </span>
+                        </div>
+                    </div>
+
+                    <% if (user.role===1 || user.role===2) { %>
+                        <!-- Managed Events Section -->
+                        <div class="bg-white/80 backdrop-blur-sm rounded-2xl border border-amber-100 p-6">
+                            <div class="flex items-center justify-between mb-6">
+                                <h2 class="text-xl font-bold text-gray-800">
+                                    <% if (user.role===2) { %>
+                                        All Events
+                                        <% } else { %>
+                                            Your Hosted Events
+                                            <% } %>
+                                </h2>
+                                <a href="/events/new"
+                                    class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-lg font-medium hover:from-amber-600 hover:to-orange-600 transition-all shadow-md">
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M12 4v16m8-8H4" />
+                                    </svg>
+                                    New Event
+                                </a>
+                            </div>
+
+                            <% if (managedEvents && managedEvents.length> 0) { %>
+                                <div class="space-y-4">
+                                    <% managedEvents.forEach(event=> { %>
+                                        <div
+                                            class="border border-gray-100 rounded-xl p-4 hover:shadow-md transition-shadow">
+                                            <div
+                                                class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+                                                <!-- Event Info -->
+                                                <div class="flex-1">
+                                                    <div class="flex items-center gap-3 mb-2">
+                                                        <a href="/events/<%= event.id %>"
+                                                            class="text-lg font-semibold text-gray-800 hover:text-amber-600">
+                                                            <%= event.title %>
+                                                        </a>
+                                                        <% if (new Date(event.date) < new Date()) { %>
+                                                            <span
+                                                                class="px-2 py-0.5 bg-gray-100 text-gray-500 rounded-full text-xs">Past</span>
+                                                            <% } else if (event.isRsvpOpen && !event.isRsvpOpen()) { %>
+                                                                <span
+                                                                    class="px-2 py-0.5 bg-red-100 text-red-600 rounded-full text-xs">RSVP
+                                                                    Closed</span>
+                                                                <% } else { %>
+                                                                    <span
+                                                                        class="px-2 py-0.5 bg-green-100 text-green-600 rounded-full text-xs">RSVP
+                                                                        Open</span>
+                                                                    <% } %>
+                                                    </div>
+                                                    <div class="flex items-center gap-4 text-sm text-gray-500">
+                                                        <span class="flex items-center">
+                                                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor"
+                                                                viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                    stroke-width="2"
+                                                                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                                            </svg>
+                                                            <%= new Date(event.date).toLocaleDateString() %>
+                                                                <%= new Date(event.date).toLocaleTimeString([],
+                                                                    {hour: '2-digit' , minute:'2-digit'}) %>
+                                                        </span>
+                                                        <span class="flex items-center">
+                                                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor"
+                                                                viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                    stroke-width="2"
+                                                                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                            </svg>
+                                                            <!-- Note: Filtering rsvps by status manual here as include filter might not be simpler in controller without more queries -->
+                                                            <%= event.rsvps ? event.rsvps.filter(r=> r.status ===
+                                                                1).length : 0 %><%= event.capacity ? '/' +
+                                                                    event.capacity : "" %> attending
+                                                        </span>
+                                                        <% if (user.role===2 && event.user) { %>
+                                                            <span class="text-gray-400">by <%= event.user.username %>
+                                                                    </span>
+                                                            <% } %>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Actions -->
+                                                <div class="flex items-center gap-2">
+                                                    <a href="/events/<%= event.id %>/edit"
+                                                        class="px-3 py-2 text-gray-600 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition-colors">
+                                                        <svg class="w-5 h-5" fill="none" stroke="currentColor"
+                                                            viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                stroke-width="2"
+                                                                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                                        </svg>
+                                                    </a>
+                                                    <a href="/events/<%= event.id %>"
+                                                        class="px-3 py-2 text-gray-600 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition-colors">
+                                                        <svg class="w-5 h-5" fill="none" stroke="currentColor"
+                                                            viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                stroke-width="2"
+                                                                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                                        </svg>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <% }); %>
+                                </div>
+                                <% } else { %>
+                                    <div class="text-center py-8 text-gray-500">
+                                        <p>No events yet.</p>
+                                        <a href="/events/new"
+                                            class="text-amber-600 hover:text-amber-700 font-medium">Create your first
+                                            event</a>
+                                    </div>
+                                    <% } %>
+                        </div>
+                        <% } %>
+
+                            <!-- My RSVPs Section -->
+                            <div class="bg-white/80 backdrop-blur-sm rounded-2xl border border-amber-100 p-6">
+                                <h2 class="text-xl font-bold text-gray-800 mb-6">
+                                    <% if (user.role===0) { %>
+                                        Your Upcoming Iftars
+                                        <% } else { %>
+                                            RSVPs You've Made
+                                            <% } %>
+                                </h2>
+
+                                <% if (upcomingRsvps && upcomingRsvps.length> 0) { %>
+                                    <div class="space-y-3">
+                                        <% upcomingRsvps.forEach(rsvp=> { %>
+                                            <div
+                                                class="flex items-center justify-between p-4 border border-gray-100 rounded-xl hover:shadow-sm transition-shadow">
+                                                <div class="flex items-center">
+                                                    <div
+                                                        class="w-12 h-12 bg-gradient-to-br from-amber-400 to-orange-500 rounded-xl flex items-center justify-center mr-4">
+                                                        <svg class="w-6 h-6 text-white" fill="none"
+                                                            stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                stroke-width="2"
+                                                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                                        </svg>
+                                                    </div>
+                                                    <div>
+                                                        <a href="/events/<%= rsvp.event.id %>"
+                                                            class="font-semibold text-gray-800 hover:text-amber-600">
+                                                            <%= rsvp.event.title %>
+                                                        </a>
+                                                        <div class="text-sm text-gray-500">
+                                                            <%= new Date(rsvp.event.date).toLocaleDateString() %> at <%=
+                                                                    new Date(rsvp.event.date).toLocaleTimeString([],
+                                                                    {hour: '2-digit' , minute:'2-digit'}) %>
+                                                                    <span class="mx-1">•</span>
+                                                                    <%= rsvp.event.location %>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="flex items-center gap-2">
+                                                    <span
+                                                        class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium">
+                                                        <%= rsvp.status===1 ? 'Confirmed' : rsvp.status===2 ? 'Declined'
+                                                            : 'Pending' %>
+                                                    </span>
+                                                    <form action="/events/<%= rsvp.event.id %>/rsvp?_method=DELETE"
+                                                        method="POST">
+                                                        <button type="submit"
+                                                            class="text-gray-400 hover:text-red-500 transition-colors cursor-pointer">
+                                                            <svg class="w-5 h-5" fill="none" stroke="currentColor"
+                                                                viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                    stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                                            </svg>
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                            <% }); %>
+                                    </div>
+                                    <% } else { %>
+                                        <div class="text-center py-8 text-gray-500">
+                                            <p>You haven't RSVP'd to any upcoming events.</p>
+                                            <a href="/events"
+                                                class="text-amber-600 hover:text-amber-700 font-medium">Browse
+                                                events</a>
+                                        </div>
+                                        <% } %>
+
+                                            <% if (pastRsvps && pastRsvps.length> 0) { %>
+                                                <div class="mt-6 pt-6 border-t border-gray-100">
+                                                    <h3 class="text-sm font-medium text-gray-500 mb-3">Past Events</h3>
+                                                    <div class="space-y-2">
+                                                        <% pastRsvps.forEach(rsvp=> { %>
+                                                            <div
+                                                                class="flex items-center justify-between py-2 text-gray-400">
+                                                                <span>
+                                                                    <%= rsvp.event.title %>
+                                                                </span>
+                                                                <span class="text-sm">
+                                                                    <%= new Date(rsvp.event.date).toLocaleDateString()
+                                                                        %>
+                                                                </span>
+                                                            </div>
+                                                            <% }); %>
+                                                    </div>
+                                                </div>
+                                                <% } %>
+                            </div>
+                </div>
+            </main>
+
+            <%- include('../partials/footer') %>
+</body>
+
+</html>

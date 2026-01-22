@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html class="h-full">
+
+<head>
+    <%- include('../partials/head', { title: 'Sign Up - Meet Your Neighbour' }) %>
+</head>
+
+<body class="h-full bg-gradient-to-br from-amber-50 via-orange-50 to-rose-50 font-['Inter'] flex flex-col">
+    <%- include('../partials/navbar') %>
+
+        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full flex-grow flex items-center justify-center">
+            <div class="w-full max-w-md">
+                <div class="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl p-8 border border-amber-100">
+                    <div class="text-center mb-8">
+                        <div
+                            class="w-16 h-16 bg-gradient-to-br from-amber-500 to-orange-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+                            </svg>
+                        </div>
+                        <h1 class="text-2xl font-bold text-gray-800">Create Account</h1>
+                        <p class="text-gray-500 mt-1">Join our Iftar community</p>
+                    </div>
+
+                    <form action="/signup" method="POST" class="space-y-5">
+                        <!-- CSRF Token would go here if using csurf, skipping for now as per plan/reqs -->
+
+                        <% if (error && error.length> 0) { %>
+                            <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl">
+                                <%= error %>
+                            </div>
+                            <% } %>
+
+                                <div>
+                                    <label for="username"
+                                        class="block text-sm font-medium text-gray-700 mb-1">Username</label>
+                                    <input type="text" name="username" id="username" required
+                                        class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-amber-500 focus:ring-2 focus:ring-amber-200 transition-all outline-none"
+                                        placeholder="Choose a username">
+                                </div>
+
+                                <div>
+                                    <label for="email"
+                                        class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                                    <input type="email" name="email" id="email" required
+                                        class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-amber-500 focus:ring-2 focus:ring-amber-200 transition-all outline-none"
+                                        placeholder="your@email.com">
+                                </div>
+
+                                <div>
+                                    <label for="password"
+                                        class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                                    <input type="password" name="password" id="password" required
+                                        class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-amber-500 focus:ring-2 focus:ring-amber-200 transition-all outline-none"
+                                        placeholder="Create a password">
+                                </div>
+
+                                <!-- Removed Password Confirmation for simplicity or add if needed. Rails had it. -->
+
+                                <!-- Role Selection -->
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-3">I want to...</label>
+                                    <div class="grid grid-cols-2 gap-3">
+                                        <label class="relative cursor-pointer">
+                                            <input type="radio" name="role" value="0" class="peer sr-only" checked>
+                                            <div
+                                                class="p-4 rounded-xl border-2 border-gray-200 peer-checked:border-amber-500 peer-checked:bg-amber-50 transition-all">
+                                                <div class="flex flex-col items-center text-center">
+                                                    <div
+                                                        class="w-10 h-10 bg-gray-100 peer-checked:bg-amber-100 rounded-full flex items-center justify-center mb-2">
+                                                        <svg class="w-5 h-5 text-gray-500" fill="none"
+                                                            stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                stroke-width="2"
+                                                                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                                        </svg>
+                                                    </div>
+                                                    <span class="font-semibold text-gray-800">Join as Guest</span>
+                                                    <span class="text-xs text-gray-500 mt-1">RSVP to events</span>
+                                                </div>
+                                            </div>
+                                        </label>
+                                        <label class="relative cursor-pointer">
+                                            <input type="radio" name="role" value="1" class="peer sr-only">
+                                            <div
+                                                class="p-4 rounded-xl border-2 border-gray-200 peer-checked:border-amber-500 peer-checked:bg-amber-50 transition-all">
+                                                <div class="flex flex-col items-center text-center">
+                                                    <div
+                                                        class="w-10 h-10 bg-gray-100 peer-checked:bg-amber-100 rounded-full flex items-center justify-center mb-2">
+                                                        <svg class="w-5 h-5 text-gray-500" fill="none"
+                                                            stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                stroke-width="2"
+                                                                d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
+                                                        </svg>
+                                                    </div>
+                                                    <span class="font-semibold text-gray-800">Become a Host</span>
+                                                    <span class="text-xs text-gray-500 mt-1">Create & manage
+                                                        events</span>
+                                                </div>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <button type="submit"
+                                        class="w-full bg-gradient-to-r from-amber-500 to-orange-500 text-white py-3 px-4 rounded-xl font-semibold hover:from-amber-600 hover:to-orange-600 transition-all shadow-lg hover:shadow-xl cursor-pointer">
+                                        Create Account
+                                    </button>
+                                </div>
+                    </form>
+
+                    <p class="text-center text-gray-500 mt-6">
+                        Already have an account?
+                        <a href="/login" class="text-amber-600 hover:text-amber-700 font-medium">Login</a>
+                    </p>
+                </div>
+            </div>
+        </main>
+
+        <%- include('../partials/footer') %>
+</body>
+
+</html>

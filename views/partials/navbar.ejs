@@ -1,0 +1,53 @@
+<nav class="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-50 border-b border-amber-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-24">
+            <div class="flex items-center">
+                <a href="/" class="flex items-center space-x-2 group">
+                    <div class="flex items-center justify-center">
+                        <img src="/logo.png" alt="Icon" class="w-64 h-64">
+                    </div>
+                </a>
+            </div>
+
+            <div class="flex items-center space-x-4">
+                <a href="/events" class="text-gray-600 hover:text-amber-600 font-medium transition-colors">Events</a>
+
+                <% if (user) { %>
+                    <a href="/dashboard"
+                        class="text-gray-600 hover:text-amber-600 font-medium transition-colors">Dashboard</a>
+                    <% if (user.role===1 || user.role===2) { /* host or admin */ %>
+                        <a href="/events/new"
+                            class="bg-gradient-to-r from-amber-500 to-orange-500 text-white px-4 py-2 rounded-lg font-medium hover:from-amber-600 hover:to-orange-600 transition-all shadow-md hover:shadow-lg">Host
+                            Event</a>
+                        <% } %>
+
+                            <div class="flex items-center space-x-3 ml-4 pl-4 border-l border-gray-200">
+                                <div class="flex items-center space-x-2">
+                                    <div
+                                        class="w-8 h-8 bg-gradient-to-br from-amber-400 to-orange-500 rounded-full flex items-center justify-center text-white font-semibold text-sm">
+                                        <%= user.username.charAt(0).toUpperCase() %>
+                                    </div>
+                                    <span class="text-gray-700 font-medium">
+                                        <%= user.username %>
+                                    </span>
+                                    <span
+                                        class="text-xs px-2 py-0.5 rounded-full <%= user.role === 2 ? 'bg-purple-100 text-purple-700' : user.role === 1 ? 'bg-amber-100 text-amber-700' : 'bg-gray-100 text-gray-600' %>">
+                                        <%= user.role===2 ? 'Admin' : user.role===1 ? 'Host' : 'Guest' %>
+                                    </span>
+                                </div>
+                                <form action="/logout?_method=DELETE" method="POST" class="inline">
+                                    <button type="submit"
+                                        class="text-gray-500 hover:text-red-600 font-medium transition-colors">Logout</button>
+                                </form>
+                            </div>
+                            <% } else { %>
+                                <a href="/login"
+                                    class="text-gray-600 hover:text-amber-600 font-medium transition-colors">Login</a>
+                                <a href="/signup"
+                                    class="bg-gradient-to-r from-amber-500 to-orange-500 text-white px-4 py-2 rounded-lg font-medium hover:from-amber-600 hover:to-orange-600 transition-all shadow-md hover:shadow-lg">Sign
+                                    Up</a>
+                                <% } %>
+            </div>
+        </div>
+    </div>
+</nav>

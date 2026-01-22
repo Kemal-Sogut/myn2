@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html class="h-full">
+
+<head>
+    <%- include('../partials/head', { title: 'New Event - Meet Your Neighbour' }) %>
+</head>
+
+<body class="h-full bg-gradient-to-br from-amber-50 via-orange-50 to-rose-50 font-['Inter'] flex flex-col">
+    <%- include('../partials/navbar') %>
+        <%- include('../partials/flash') %>
+
+            <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full flex-grow">
+                <div class="max-w-3xl mx-auto">
+                    <div class="mb-8">
+                        <a href="/events"
+                            class="inline-flex items-center text-gray-600 hover:text-amber-600 transition-colors">
+                            <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 19l-7-7 7-7" />
+                            </svg>
+                            Back to events
+                        </a>
+                        <h1 class="text-3xl font-bold text-gray-800 mt-4">Host a New Iftar</h1>
+                        <p class="text-gray-600 mt-1">Fill in the details to create your event</p>
+                    </div>
+
+                    <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-8 border border-amber-100 shadow-xl">
+                        <%- include('_form', { action: '/events' , method: 'POST' , submitText: 'Create Event' }) %>
+                    </div>
+                </div>
+            </main>
+
+            <%- include('../partials/footer') %>
+</body>
+
+</html>
