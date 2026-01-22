@@ -50,14 +50,30 @@ app.use('/', indexRoutes);
 app.use('/', authRoutes);
 app.use('/events', require('./routes/events'));
 
-// Database Connection & Server Start
-sequelize.sync({ force: false }) // Set force: true to drop tables on restart
-    .then(() => {
-        console.log('Database connected!');
-        app.listen(PORT, () => {
-            console.log(`Server running on http://localhost:${PORT}`);
-        });
-    })
-    .catch(err => {
-        console.error('Unable to connect to the database:', err);
+// Health check route (for debugging)
+app.get('/health', (req, res) => {
+    res.json({
+        status: 'ok',
+        env: process.env.NODE_ENV,
+        dbHost: process.env.DB_HOST || 'not set',
+        dbName: process.env.DB_NAME || 'not set'
     });
+});
+
+// Start server FIRST, then connect to database
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+    console.log('Environment:', process.env.NODE_ENV);
+    console.log('DB Host:', process.env.DB_HOST);
+    console.log('DB Name:', process.env.DB_NAME);
+
+    // Now sync database
+    sequelize.sync({ alter: true })
+        .then(() => {
+            console.log('Database connected and synced!');
+        })
+        .catch(err => {
+            console.error('Database connection error:', err.message);
+            console.error('Full error:', err);
+        });
+});
